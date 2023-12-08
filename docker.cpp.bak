@@ -1,0 +1,71 @@
+DOCKER // вывод подсказки
+DOCKER IMAGES // вывод списка образов
+DOCKER PS // вывод списка контейнеров
+DOCKER RM containerId // удаление кнтейнера
+DOCKER RMI imageId // удаление образа {
+	DOCKER IMAGE RM imageId // возможно синоним
+}
+
+DOCKER PULL imageName {
+	// скачать образ из репозитория
+	DOCKER PULL imageName:versionNumber // определить версию скачивемого образа. 
+	// Например:
+	docker pull openjdk:8
+
+	// Если версия не указана, то это аналогично следующему вызову:
+	DOCKER PULL imageName:LATEST
+	
+}
+
+DOCKER RUN imageName // создание и запуск контейнера. 
+DOCKER RUN -IT imageName // --IT - создание и запуск контейнера в интерактивном режиме. То есть в терминале произойдёт переход в приложение {
+	// Пример
+	docker run -it python // тут интерактивно запустится питон и мы попадём в консоль ввода кода питона
+	
+	Ctrl + D  // выйти из интерактивного режима, вернуться в cmd
+
+}
+DOCKER RUN --NAME MyContainer imageName // --NAME - указать имя создаваемому контейнеру
+DOCKER RUN -P outerPost:innerPort imageName // совместить порты на устройстве и внутри контейнера {
+	docker run -p 8080:8001 MyImage
+}
+
+
+
+DOCKER START containerName // запуск созданного ранее контейнера
+DOCKER STOP containerName // остановка контейнера
+DOCKER KILL containerName // аварийная остановка контейнера, например, если контейнер перестал отвечать
+
+Dockerfile {
+
+
+	FROM imageName:version			// какой образ исползовать как основу
+	COPY myProjectSourceDir myProjectDestDir  	// какие файлы из текущего проекта копируем в какую папку внутри контейнера
+	WORKDIR workDir			// рабочая директория нашего проекта. Обычно совпадает с myProjectDestDir
+	EXPOSE port				// указывается порт для приложения
+	RUN command words		// выполнить действие при первоначальном запуск контейнера
+	CMD ["word1", "word2"] 	// выполнение действия при каждом запуске контейнера
+	
+	// Пример
+	FROM openjdk:11			
+	COPY . /usr/src/myapp  	
+	WORKDIR /usr/src/myapp
+	EXPOSE 8001	
+	RUN javac Main.java
+	CMD ["java", "Main"]
+	
+	подробнее о CMD {
+		В примере видим следующее:
+			CMD ["java", "Main"]
+		Это говорит докеру, что нужно сконструировать команду в консоли подставив слова из массива по очереди через пробел
+		То есть массив строк ["java", "Main"] будет преобразован в команду java Main, которая запускает java класс
+	}
+}
+
+
+DOCKER BUILD pathToDockerfile // построить проект, указав путь к докерфайлу. Путь указывается относительно текущего положения {
+	Можно указать точку, если мы находися в этой же директории:
+	docker build .
+	
+	DOCKER BUILD -T imageTitle pathToDockerfile // такми образом можно назвать образ
+}
