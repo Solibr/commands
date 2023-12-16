@@ -98,9 +98,11 @@ Git commands {
 		git checkout -- <filename> // отменить модификацию файлов
 	}
 	git remote{ 
+		// shortname is often "origin"
 		git remote // получение списка удалённых репозиториев
 		git remote -v // получение адресов репозиториев
 		git remote add <shortname> <url>
+		git remote remove <shortname>
 	}
 	git branch{
 		git branch -m <old name> <new name> // изменение имени ветки // m - modify
@@ -113,11 +115,21 @@ Git commands {
 	}
 	git merge{
 		git merge -m <merge message>
-		git merge <branch name> // сливает ветку
+		git merge <branch name> { // сливает указанную ветку в текущую ветку 
+			intended to be used from master branch
+			If I want to see changes commited in an another branch in the master branch,
+			then I should use 
+				git checkout master
+				git merge another_branch
+		}
 		git merge --abort // отмена автоматического сливания, т.е. без конфликтов
 		git merge FETCH_HEAD // слить fetch в локальныую master
 		git merge FETCH_HEAD -m <merge message>// то же но дать название merge commit
 	}
+	git rebase <branch> {
+		git rebase master // rebase current branch onto master
+	}
+	git cherry-pick <commit> // add a commit to current branch
 	git blame <filename> //
 	git gc // старых архивных версий
 	git stash{
@@ -138,6 +150,7 @@ Git commands {
 	}
 	
 	git config {
+		git config --global core.editor "vim" 
 		git config --global user.email "your_email_address@example.com" // логин
 	}
 	IDE features:
