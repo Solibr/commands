@@ -14,6 +14,8 @@
         Пароль устанавливается при установке
 
         psql -U postgres // войти в консоль postgres под корневым пользователем
+		
+		psql -U postgres -h <hostname or ip> -p <port> -d <database> // remote connect
 
         Если появляется ПРЕДУПРЕЖДЕНИЕ: "Кодовая страница консоли (866) отличается от основной страницы Windows (1251)". {
         	Полный текст: {
@@ -46,7 +48,6 @@
 
 Работа с базами данных {
 
-	
 	SHOW DATABASES; { // Показыввает Список баз данных
 		Mysql: 
 			show databases;
@@ -494,6 +495,41 @@
     }
 }
 
+TRANSACTIONS {
+	
+	Usage {	
+		begin; // начать транзакцию
+		commit; // успешно завершить транзакцию
+		chackpoint some_text; // не уверен, что правильно написал
+		rollback; { // откатиться
+			rollback to // от
+		}
+		set transaction isolation level {read commited, repeatable read, serializable} //  нужно писать внутри транзакции (по крайней мере в postgres)
+		show transaction_isolation; // показать текущий уровень изоляции
+					
+	}
+	
+	
+	Isolation levels {
+		Read Uncommited (sees non commited changes, and new rows)
+			Have all problems
+		Read Commited (sees commited changes, and new rows)
+			Excludes dirty read problem
+		Repeatable Read (sees commitad changes only before this transaction begins, but new rows during transaction too)
+			Excludes non-repeatable read
+		Serializable (some like Repeateble read, but don't sees new rows. So insertions and deletions are serial with this isolation)
+			Excludes phantom reads
+	}
+	
+	ACID {
+		Atomicity - операции в транзакции либо выполняются все, либо не выполняется ничего.
+		Consistency - транзацикции позволяют сохранить согласованность данных
+		Isolation - транзакции работают независимо, не видны промежуточные результаты внутри транзакции
+		Durability - при получении инфмормации о завершении транзакции, данные гарантировано сохранены
+	}
+}
+}
+
 Other {
 	MySQL 
 		// Other
@@ -503,3 +539,6 @@ Other {
 		mysql -uroot -ppassword -e "USE my_database; set names utf8mb4; select * from table" > file_name.txt // Так можно выгрузить данные в файл. Однако в моих тестах требовалось прописывать set names как в примере, так как без него были проблемы с кодировкой. Видимо потому что Windows по-умолчанию использует что-то традиционое
 }
 
+INDEXES {
+	CREATE UNIQUE CLUSTERED INDEX ix_oriderid_lineid ON dbo.Sales(OrderID, LineID); // create complex index on two fields
+}

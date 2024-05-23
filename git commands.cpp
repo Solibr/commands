@@ -33,8 +33,11 @@ Git commands {
 		git commit -a -m <назвние коммита> // добавление изменений в коммита минуя индекс
 		git commit --amend // чтобы дополнить псследний коммит или поменять название
 	}
-	git rm <filename>// удаляет файл с диска
-	git rm <filename> --cached // удаляет файл из трекинга?
+	git rm <filename> {// удаляет файл с диска
+		git rm <filename>
+		git rm <filename> --cached // удаляет файл из трекинга. Useful to exclude file with gitignore
+		-r // recursive
+	}
 	git mv <filename>// переименование файла
 	git log // показ истории коммитов
 	git show // показ последнего коммита
@@ -131,7 +134,7 @@ Git commands {
 	}
 	git cherry-pick <commit> // add a commit to current branch
 	git blame <filename> //
-	git gc // старых архивных версий
+	git gc // старых архивных версий ??
 	git stash{
 		git stash // застешить изменение, рабочая дирректория очищается от изменений
 		git stash save <message> // то же самое, но дать сообщение стешу
